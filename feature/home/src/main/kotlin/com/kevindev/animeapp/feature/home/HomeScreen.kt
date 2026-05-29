@@ -23,6 +23,7 @@ import com.kevindev.animeapp.core.ui.components.AnimeSectionRow
 import com.kevindev.animeapp.core.ui.components.AnimeSectionRowShimmer
 import com.kevindev.animeapp.core.ui.components.ErrorState
 import com.kevindev.animeapp.core.ui.components.SectionHeader
+import com.kevindev.animeapp.core.ui.components.ShimmerBox
 import com.kevindev.animeapp.core.ui.theme.AnimeBg
 import com.kevindev.animeapp.feature.home.components.ContinueWatchingCard
 import com.kevindev.animeapp.feature.home.components.HeroBanner
@@ -104,7 +105,11 @@ private fun HomeContent(
 @Composable
 private fun HomeLoading() {
     Column(modifier = Modifier.fillMaxSize()) {
-        Spacer(modifier = Modifier.height(420.dp))
+        ShimmerBox(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(420.dp),
+        )
         repeat(2) {
             Spacer(modifier = Modifier.height(24.dp))
             AnimeSectionRowShimmer()

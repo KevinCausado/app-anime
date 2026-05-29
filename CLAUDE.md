@@ -91,11 +91,12 @@ Cuando KSP y Apollo sean 100% compatibles con built-in Kotlin, eliminar:
 | Kotlin | 2.3.21 |
 | KSP | 2.3.9 |
 
-## Estado actual (Mayo 2026)
+## Estado actual (Mayo 2026) — TODAS LAS FASES COMPLETAS
 
 | Fase | Estado | Módulos |
 |---|---|---|
 | 1. Setup | ✅ Completo | multi-módulo + version catalog + plugins |
+| 12. Polish | ✅ Completo | ProGuard rules, minify release, Apollo memory cache 10MB, CacheManager TTL 24h, shimmer banner HomeLoading |
 | 2. Core Network | ✅ Completo | Apollo (5 queries), Retrofit (HiAnime + AnimeKai), DTOs, mappers, DI |
 | 3. Core Database + DataStore | ✅ Completo | Room (7 entidades, 7 DAOs), ProfileDataStore |
 | 4. Design System | ✅ Completo | AnimeTheme, AnimeCard, EpisodeCard, SectionHeader, SectionRow, Shimmer, ErrorState |

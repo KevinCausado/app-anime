@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.ApolloResponse
+import com.kevindev.animeapp.core.database.CacheManager
 import com.kevindev.animeapp.core.database.dao.AnimeDao
 import com.kevindev.animeapp.core.database.dao.WatchHistoryDao
 import com.kevindev.animeapp.core.database.entity.AnimeEntity
@@ -55,6 +56,7 @@ class HomeViewModel @Inject constructor(
     private val animeDao: AnimeDao,
     private val watchHistoryDao: WatchHistoryDao,
     private val profileDataStore: ProfileDataStore,
+    private val cacheManager: CacheManager,
     private val json: Json,
 ) : ViewModel() {
 
@@ -69,6 +71,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = HomeUiState.Loading
             try {
+                cacheManager.evictStale()
                 val (season, year) = currentSeasonAndYear()
 
                 val trendingDeferred = async { fetchTrending() }
