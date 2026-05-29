@@ -104,7 +104,7 @@ Cuando KSP y Apollo sean 100% compatibles con built-in Kotlin, eliminar:
 | 7. Feature Search | ✅ Completo | SearchViewModel (debounce 300ms), SearchPagingSource (Apollo Paging3), AnimeSearchBar, FilterSheet (género/formato/estado), SearchScreen grid 3 cols |
 | 8. Feature Detail | ✅ Completo | DetailViewModel (Apollo+Consumet+favoritos/watchlist), DetailHeader (banner+desc expandible+acciones), EpisodeList, RelatedAnimeRow, DetailScreen |
 | 9. Feature Player (MVI) | ✅ Completo | PlayerIntent/State/Effect, ExoPlayerManager (HLS+subtítulos), PlayerViewModel (fallback HiAnime→AnimeKai, guardado progreso 10s), PlayerScreen (controles custom, skip intro/outro, seekbar) |
-| 10. Android TV | ⚠️ Esqueleto | TvActivity + TvNavHost (sin rutas ni pantallas) |
+| 10. Android TV | ✅ Completo | TvHomeScreen (Carousel), TvSearchScreen (grid 5 cols), TvDetailScreen, TvPlayerScreen (reutiliza PlayerScreen), TvSearchBar, TvNavHost con rutas completas |
 | 11. Notificaciones | ❌ Pendiente | No existe |
 
 ---
