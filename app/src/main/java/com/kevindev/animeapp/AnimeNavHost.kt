@@ -8,6 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.kevindev.animeapp.feature.detail.detailScreen
 import com.kevindev.animeapp.feature.detail.navigateToDetail
+import com.kevindev.animeapp.feature.player.navigateToPlayer
+import com.kevindev.animeapp.feature.player.playerScreen
 import com.kevindev.animeapp.feature.home.HOME_ROUTE
 import com.kevindev.animeapp.feature.home.homeScreen
 import com.kevindev.animeapp.feature.profile.PROFILE_EDIT_ROUTE
@@ -54,7 +56,12 @@ fun AnimeNavHost() {
         )
         detailScreen(
             onBack = { navController.popBackStack() },
-            onPlayEpisode = { _, _ -> /* player en Fase 9 */ },
+            onPlayEpisode = { animeId, episodeId ->
+                navController.navigateToPlayer(animeId, episodeId)
+            },
+        )
+        playerScreen(
+            onBack = { navController.popBackStack() },
         )
         // Rutas de features siguientes se agregan aquí
     }
