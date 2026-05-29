@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.kevindev.animeapp.feature.home.HOME_ROUTE
 import com.kevindev.animeapp.feature.home.homeScreen
+import com.kevindev.animeapp.feature.search.searchScreen
 import com.kevindev.animeapp.feature.profile.PROFILE_EDIT_ROUTE
 import com.kevindev.animeapp.feature.profile.PROFILE_SELECTION_ROUTE
 import com.kevindev.animeapp.feature.profile.ProfileUiState
@@ -44,6 +45,9 @@ fun AnimeNavHost() {
             onBack = { navController.popBackStack() },
         )
         homeScreen(
+            onAnimeClick = { /* detail en Fase 8 */ },
+        )
+        searchScreen(
             onAnimeClick = { /* detail en Fase 8 */ },
         )
         // Rutas de features siguientes se agregan aquí
