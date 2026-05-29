@@ -41,6 +41,7 @@ import com.kevindev.animeapp.core.ui.components.ErrorState
 import com.kevindev.animeapp.core.ui.theme.AnimeBg
 import com.kevindev.animeapp.core.ui.theme.AnimeOrange
 import com.kevindev.animeapp.core.ui.theme.AnimeOnSurfaceMuted
+import com.kevindev.animeapp.core.ui.theme.AnimeSurface
 import com.kevindev.animeapp.core.uitv.components.TvSectionRow
 import com.kevindev.animeapp.feature.detail.DetailUiState
 import com.kevindev.animeapp.feature.detail.DetailViewModel
@@ -180,7 +181,7 @@ private fun TvDetailContent(
                 )
             }
             items(state.episodes.take(5), key = { it.id }) { episode ->
-                androidx.compose.foundation.layout.Row(
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 48.dp, vertical = 6.dp),
@@ -190,7 +191,7 @@ private fun TvDetailContent(
                     Button(
                         onClick = { onPlayEpisode(animeId, episode.id) },
                         colors = ButtonDefaults.colors(
-                            containerColor = com.kevindev.animeapp.core.ui.theme.AnimeSurface,
+                            containerColor = AnimeSurface,
                         ),
                         shape = ButtonDefaults.shape(shape = RoundedCornerShape(6.dp)),
                     ) {

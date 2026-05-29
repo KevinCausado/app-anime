@@ -1,12 +1,10 @@
 package com.kevindev.animeapp.core.network.di
 
-import android.content.Context
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.cache.normalized.api.MemoryCacheFactory
 import com.apollographql.apollo.cache.normalized.normalizedCache
 import com.apollographql.apollo.network.http.HttpNetworkTransport
 import com.kevindev.animeapp.core.network.BuildConfig
-import dagger.hilt.android.qualifiers.ApplicationContext
 import com.kevindev.animeapp.core.network.consumet.AnimekaiApi
 import com.kevindev.animeapp.core.network.consumet.HiAnimeApi
 import dagger.Module
