@@ -43,6 +43,7 @@ dependencies {
     implementation(project(":core:model"))
 
     implementation(libs.bundles.networking)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.apollo.runtime)
     implementation(libs.apollo.normalized.cache)
     implementation(libs.apollo.normalized.cache.sqlite)

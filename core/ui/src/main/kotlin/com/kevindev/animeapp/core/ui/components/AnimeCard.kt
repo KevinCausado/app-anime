@@ -50,9 +50,10 @@ fun AnimeCard(
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.matchParentSize(),
             )
-            if (showScore && anime.averageScore != null) {
+            val score = anime.averageScore
+            if (showScore && score != null) {
                 ScoreBadge(
-                    score = anime.averageScore,
+                    score = score,
                     modifier = Modifier
                         .align(Alignment.TopEnd)
                         .padding(4.dp),

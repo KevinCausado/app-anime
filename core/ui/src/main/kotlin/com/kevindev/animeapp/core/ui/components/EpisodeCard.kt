@@ -79,10 +79,11 @@ fun EpisodeCard(
                 style = MaterialTheme.typography.labelLarge,
                 color = AnimeOrange,
             )
-            if (episode.title != null) {
+            val title = episode.title
+            if (title != null) {
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = episode.title,
+                    text = title,
                     style = MaterialTheme.typography.bodyMedium,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
