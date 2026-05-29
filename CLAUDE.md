@@ -91,16 +91,223 @@ Cuando KSP y Apollo sean 100% compatibles con built-in Kotlin, eliminar:
 | Kotlin | 2.3.21 |
 | KSP | 2.3.9 |
 
-## Fases de implementación (ver plan completo)
-1. Setup multi-módulo + build-logic + libs.versions.toml
-2. Core Network (Apollo + Retrofit)
-3. Core Database (Room + DataStore)
-4. Design System (AnimeTheme + componentes base)
-5. Feature Profile
-6. Feature Home
-7. Feature Search
-8. Feature Detail
-9. Feature Player (MVI)
-10. Android TV screens
-11. Notificaciones WorkManager
-12. Polish + caché TTL + ProGuard
+## Estado actual (Mayo 2026)
+
+| Fase | Estado | Módulos |
+|---|---|---|
+| 1. Setup | ✅ Completo | multi-módulo + version catalog + plugins |
+| 2. Core Network | ✅ Completo | Apollo (5 queries), Retrofit (HiAnime + AnimeKai), DTOs, mappers, DI |
+| 3. Core Database + DataStore | ✅ Completo | Room (7 entidades, 7 DAOs), ProfileDataStore |
+| 4. Design System | ✅ Completo | AnimeTheme, AnimeCard, EpisodeCard, SectionHeader, SectionRow, Shimmer, ErrorState |
+| 5. Feature Profile | ✅ Completo | ProfileViewModel, ProfileSelectionScreen, ProfileEditScreen, ProfileNavigation, AnimeNavHost actualizado |
+| 6. Feature Home | ❌ Pendiente | Módulo vacío |
+| 7. Feature Search | ❌ Pendiente | Módulo vacío |
+| 8. Feature Detail | ❌ Pendiente | Módulo vacío |
+| 9. Feature Player (MVI) | ❌ Pendiente | Módulo vacío |
+| 10. Android TV | ⚠️ Esqueleto | TvActivity + TvNavHost (sin rutas ni pantallas) |
+| 11. Notificaciones | ❌ Pendiente | No existe |
+
+---
+
+## Instrucciones por fase pendiente
+
+### Fase 5 — Feature Profile
+
+Módulo: `feature/profile/`
+
+**Lo que debe crear:**
+- `ProfileScreen.kt` — Lista de perfiles, crear/editar, seleccionar activo
+- Contenido: avatar, nombre, botón "Agregar perfil", swipe to delete
+- Fuente de datos: `ProfileDataStore` (activeProfileId) + `ProfileDao`
+
+**Estructura esperada:**
+```
+feature/profile/src/main/kotlin/com/kevindev/animeapp/feature/profile/
+├── ProfileScreen.kt
+├── ProfileViewModel.kt
+└── ProfileNavigation.kt   (ruta "profile")
+```
+
+**Patrón:** MVVM. ViewModel con Hilt (`@HiltViewModel`). StateFlow con `ProfileUiState`.
+
+---
+
+### Fase 6 — Feature Home
+
+Módulo: `feature/home/`
+
+**Lo que debe crear:**
+- `HomeScreen.kt` — Pantalla principal con hero banner + secciones horizontales
+- Hero: `HorizontalPager` con poster grande, título, score, botón "Ver detalle"
+- Secciones: Trending, This Season, Popular, Continue Watching (si hay WatchHistory)
+- Cada sección es una `AnimeSectionRow` de core/ui
+
+**Estructura esperada:**
+```
+feature/home/src/main/kotlin/com/kevindev/animeapp/feature/home/
+├── HomeScreen.kt
+├── HomeViewModel.kt
+├── components/
+│   └── HeroBanner.kt
+└── HomeNavigation.kt   (ruta "home", startDestination)
+```
+
+**Flujo de datos:**
+```
+HomeViewModel → llama AniListRepository (que usa ApolloClient)
+             → expone StateFlow<HomeUiState>
+             → HomeScreen.collectAsState()
+```
+
+**Estados UI:** Loading, Success(hero, sections), Error.
+
+---
+
+### Fase 7 — Feature Search
+
+Módulo: `feature/search/`
+
+**Lo que debe crear:**
+- `SearchScreen.kt` — Barra de búsqueda + resultados en grid
+- Búsqueda local (debounce 300ms, mínimo 3 caracteres) vs popular initial
+- Grid 2 columnas usando `AnimeCard`
+
+**Estructura esperada:**
+```
+feature/search/src/main/kotlin/com/kevindev/animeapp/feature/search/
+├── SearchScreen.kt
+├── SearchViewModel.kt
+├── components/
+│   └── SearchBar.kt
+└── SearchNavigation.kt   (ruta "search")
+```
+
+**APIs:** Consumet HiAnime `search` (por texto) + AniList `SearchAnime` (por género/año/status/format)
+Filtros: género, año, estado (pantalla de filtros modal/bottom sheet)
+
+---
+
+### Fase 8 — Feature Detail
+
+Módulo: `feature/detail/`
+
+**Lo que debe crear:**
+- `DetailScreen.kt` — Banner, info, episodios, relaciones, recomendaciones
+- Banner con backdrop, título, score, formato, estado, descripción expandible
+- Lista de episodios con `EpisodeCard` (scroll infinito)
+- Botón "Reproducir" → navega a Player
+- Botón favorito + watchlist (usar FavoriteDao/WatchlistDao)
+
+**Estructura esperada:**
+```
+feature/detail/src/main/kotlin/com/kevindev/animeapp/feature/detail/
+├── DetailScreen.kt
+├── DetailViewModel.kt
+├── components/
+│   ├── DetailHeader.kt
+│   ├── EpisodeList.kt
+│   └── RelatedAnimeRow.kt
+└── DetailNavigation.kt   (ruta "detail/{animeId}")
+```
+
+**APIs:** AniList `AnimeDetail` + Consumet `getInfo` (para episodios streaming)
+
+---
+
+### Fase 9 — Feature Player (MVI)
+
+Módulo: `feature/player/`
+
+**Arquitectura:** MVI (no MVVM como las demás)
+
+**Lo que debe crear:**
+- `PlayerScreen.kt` — ExoPlayer fullscreen con overlay de controles
+- Controles: play/pause, seek, skip intro/outro, velocidad, subtítulos
+- `PlayerViewModel.kt` — Gestión de estado MVI con `PlayerIntent`/`PlayerState`/`PlayerEffect`
+- Integración con Media3 ExoPlayer + HLS desde Consumet
+
+**Estructura esperada:**
+```
+feature/player/src/main/kotlin/com/kevindev/animeapp/feature/player/
+├── PlayerScreen.kt
+├── PlayerViewModel.kt
+├── mvi/
+│   ├── PlayerIntent.kt
+│   ├── PlayerState.kt
+│   └── PlayerEffect.kt
+├── media/
+│   └── ExoPlayerManager.kt
+└── PlayerNavigation.kt   (ruta "player/{episodeId}")
+```
+
+**Estados MVI:** `Idle`, `Loading`, `Playing`, `Paused`, `Buffering`, `Error`
+**Intents:** `Play`, `Pause`, `SeekTo`, `SkipIntro`, `ChangeSpeed`, `SelectSubtitle`, `Back`
+
+---
+
+### Fase 10 — Android TV
+
+Módulo: `app-tv/`
+
+**Componentes TV** ya existen en `core/ui-tv`:
+- `TvAnimeCard.kt`
+- `TvSectionRow.kt`
+
+**Lo que debe crear:**
+- Reusar los ViewModels de los features phone (mismos repositorios, misma lógica)
+- Componer pantallas TV con `androidx.tv` components:
+  - `TvHomeScreen.kt` — Carousel banner + filas con `TvSectionRow`
+  - `TvSearchScreen.kt` — Search con teclado virtual TV
+  - `TvDetailScreen.kt` — Detail adaptado a TV (navegación con D-pad)
+  - `TvPlayerScreen.kt` — Player con controles TV
+
+**Estructura esperada:**
+```
+app-tv/src/main/kotlin/com/kevindev/animeapp/tv/
+├── TvActivity.kt                 (ya existe)
+├── TvApp.kt                      (ya existe)
+├── TvNavHost.kt                  (ya existe, agregar rutas)
+├── screens/
+│   ├── TvHomeScreen.kt
+│   ├── TvSearchScreen.kt
+│   ├── TvDetailScreen.kt
+│   └── TvPlayerScreen.kt
+└── components/
+    └── TvSearchBar.kt
+```
+
+**Importante:** NO crear nuevos ViewModels — reusar los de `feature/*`.
+Ejemplo: `val viewModel: HomeViewModel = hiltViewModel()`
+
+---
+
+### Fase 11 — Notificaciones WorkManager
+
+Módulo: a crear en `core/notification/` o dentro de `app/`
+
+**Lo que debe crear:**
+- `NewEpisodeWorker.kt` — Worker periódico que revisa episodios nuevos de animes trackeados
+- `NotificationHelper.kt` — Crear canales, mostrar notificaciones
+- `NotificationModule.kt` — Hilt module para Worker
+
+**Estructura esperada:**
+```
+core/notification/src/main/kotlin/com/kevindev/animeapp/core/notification/
+├── di/NotificationModule.kt
+├── NewEpisodeWorker.kt
+└── NotificationHelper.kt
+```
+
+**Worker:** PeriodicWorkRequest cada 6h, consulta Consumet `getEpisodes` para animes en `NotificationTrackEntity`, compara con `lastCheckedEpisode`.
+
+---
+
+## Reglas generales para todas las fases
+
+1. **No duplicar ViewModels entre phone y TV** — Los TV screens importan `hiltViewModel()` de feature/ modules
+2. **Navegación** — Cada feature expone su ruta como `const val` en `*Navigation.kt`, el NavHost central en `AnimeNavHost.kt` las registra
+3. **Estados** — Cada Screen maneja: `Loading`, `Success(data)`, `Error(message, onRetry)`
+4. **Paginación** — Usar Paging 3 para listas largas (episodios, resultados de búsqueda)
+5. **Local first** — Cachear metadata de AniList en Room (AnimeEntity con TTL 24h), consumir de DB primero
+6. **Sin comentarios** en código a menos que el WHY sea no obvio
+7. **Sin features no pedidas** — No agregar refactors, abstracciones ni features extras
