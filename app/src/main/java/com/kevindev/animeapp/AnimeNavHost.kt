@@ -6,15 +6,17 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.kevindev.animeapp.feature.detail.detailScreen
+import com.kevindev.animeapp.feature.detail.navigateToDetail
 import com.kevindev.animeapp.feature.home.HOME_ROUTE
 import com.kevindev.animeapp.feature.home.homeScreen
-import com.kevindev.animeapp.feature.search.searchScreen
 import com.kevindev.animeapp.feature.profile.PROFILE_EDIT_ROUTE
 import com.kevindev.animeapp.feature.profile.PROFILE_SELECTION_ROUTE
 import com.kevindev.animeapp.feature.profile.ProfileUiState
 import com.kevindev.animeapp.feature.profile.ProfileViewModel
 import com.kevindev.animeapp.feature.profile.profileEditScreen
 import com.kevindev.animeapp.feature.profile.profileSelectionScreen
+import com.kevindev.animeapp.feature.search.searchScreen
 
 @Composable
 fun AnimeNavHost() {
@@ -45,10 +47,14 @@ fun AnimeNavHost() {
             onBack = { navController.popBackStack() },
         )
         homeScreen(
-            onAnimeClick = { /* detail en Fase 8 */ },
+            onAnimeClick = { animeId -> navController.navigateToDetail(animeId) },
         )
         searchScreen(
-            onAnimeClick = { /* detail en Fase 8 */ },
+            onAnimeClick = { animeId -> navController.navigateToDetail(animeId) },
+        )
+        detailScreen(
+            onBack = { navController.popBackStack() },
+            onPlayEpisode = { _, _ -> /* player en Fase 9 */ },
         )
         // Rutas de features siguientes se agregan aquí
     }
