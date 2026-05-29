@@ -6,14 +6,14 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.kevindev.animeapp.feature.home.HOME_ROUTE
+import com.kevindev.animeapp.feature.home.homeScreen
 import com.kevindev.animeapp.feature.profile.PROFILE_EDIT_ROUTE
 import com.kevindev.animeapp.feature.profile.PROFILE_SELECTION_ROUTE
 import com.kevindev.animeapp.feature.profile.ProfileUiState
 import com.kevindev.animeapp.feature.profile.ProfileViewModel
 import com.kevindev.animeapp.feature.profile.profileEditScreen
 import com.kevindev.animeapp.feature.profile.profileSelectionScreen
-
-private const val HOME_ROUTE = "home"
 
 @Composable
 fun AnimeNavHost() {
@@ -42,6 +42,9 @@ fun AnimeNavHost() {
         )
         profileEditScreen(
             onBack = { navController.popBackStack() },
+        )
+        homeScreen(
+            onAnimeClick = { /* detail en Fase 8 */ },
         )
         // Rutas de features siguientes se agregan aquí
     }

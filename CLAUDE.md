@@ -100,7 +100,7 @@ Cuando KSP y Apollo sean 100% compatibles con built-in Kotlin, eliminar:
 | 3. Core Database + DataStore | ✅ Completo | Room (7 entidades, 7 DAOs), ProfileDataStore |
 | 4. Design System | ✅ Completo | AnimeTheme, AnimeCard, EpisodeCard, SectionHeader, SectionRow, Shimmer, ErrorState |
 | 5. Feature Profile | ✅ Completo | ProfileViewModel, ProfileSelectionScreen, ProfileEditScreen, ProfileNavigation, AnimeNavHost actualizado |
-| 6. Feature Home | ❌ Pendiente | Módulo vacío |
+| 6. Feature Home | ✅ Completo | HomeViewModel (trending+seasonal+continueWatching), HeroBanner (HorizontalPager), HomeScreen, ContinueWatchingCard, HomeNavigation |
 | 7. Feature Search | ❌ Pendiente | Módulo vacío |
 | 8. Feature Detail | ❌ Pendiente | Módulo vacío |
 | 9. Feature Player (MVI) | ❌ Pendiente | Módulo vacío |
