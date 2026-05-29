@@ -1,0 +1,19 @@
+query SeasonalAnime($season: MediaSeason, $year: Int, $page: Int = 1, $perPage: Int = 20) {
+  Page(page: $page, perPage: $perPage) {
+    media(
+      season: $season
+      seasonYear: $year
+      type: ANIME
+      sort: POPULARITY_DESC
+      isAdult: false
+    ) {
+      ...AnimeFragment
+    }
+    pageInfo {
+      total
+      currentPage
+      lastPage
+      hasNextPage
+    }
+  }
+}

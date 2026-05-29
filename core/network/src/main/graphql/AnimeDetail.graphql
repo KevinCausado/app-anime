@@ -1,0 +1,44 @@
+query AnimeDetail($id: Int) {
+  Media(id: $id, type: ANIME) {
+    ...AnimeFragment
+    description(asHtml: false)
+    characters(sort: ROLE, perPage: 12) {
+      edges {
+        role
+        node {
+          name {
+            full
+          }
+          image {
+            large
+          }
+        }
+      }
+    }
+    recommendations(sort: RATING_DESC, perPage: 10) {
+      nodes {
+        mediaRecommendation {
+          ...AnimeFragment
+        }
+      }
+    }
+    relations {
+      edges {
+        relationType
+        node {
+          id
+          title {
+            romaji
+            english
+          }
+          coverImage {
+            large
+          }
+          type
+          format
+          status
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+query SearchAnime(
+  $query: String
+  $genre: String
+  $year: Int
+  $status: MediaStatus
+  $format: MediaFormat
+  $page: Int = 1
+  $perPage: Int = 20
+) {
+  Page(page: $page, perPage: $perPage) {
+    media(
+      search: $query
+      genre: $genre
+      seasonYear: $year
+      status: $status
+      format: $format
+      type: ANIME
+      sort: SEARCH_MATCH
+      isAdult: false
+    ) {
+      ...AnimeFragment
+    }
+    pageInfo {
+      total
+      currentPage
+      lastPage
+      hasNextPage
+    }
+  }
+}

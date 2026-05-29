@@ -1,0 +1,47 @@
+query TrendingAnime($page: Int = 1, $perPage: Int = 20) {
+  Page(page: $page, perPage: $perPage) {
+    media(sort: TRENDING_DESC, type: ANIME, isAdult: false) {
+      ...AnimeFragment
+    }
+    pageInfo {
+      total
+      currentPage
+      lastPage
+      hasNextPage
+    }
+  }
+}
+
+fragment AnimeFragment on Media {
+  id
+  title {
+    romaji
+    english
+    native
+  }
+  coverImage {
+    extraLarge
+    large
+    color
+  }
+  bannerImage
+  description(asHtml: false)
+  status
+  format
+  episodes
+  duration
+  averageScore
+  genres
+  season
+  seasonYear
+  isAdult
+  studios(isMain: true) {
+    nodes {
+      name
+    }
+  }
+  nextAiringEpisode {
+    episode
+    airingAt
+  }
+}
