@@ -23,5 +23,19 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Anime App"
+
 include(":app")
- 
+include(":app-tv")
+
+include(":core:model")
+include(":core:network")
+include(":core:database")
+include(":core:datastore")
+include(":core:ui")
+include(":core:ui-tv")
+
+include(":feature:home")
+include(":feature:search")
+include(":feature:detail")
+include(":feature:player")
+include(":feature:profile")
