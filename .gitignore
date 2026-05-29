@@ -1,15 +1,29 @@
+# Build outputs
+build/
+**/build/
+
+# Gradle
+.gradle/
+**/.gradle/
+
+# Local properties (secrets)
+local.properties
+
+# IntelliJ / Android Studio
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
+.idea/
+!.idea/runConfigurations/
+
+# macOS
 .DS_Store
-/build
+
+# Captures
 /captures
+
+# Native
 .externalNativeBuild
 .cxx
-local.properties
+
+# Keystore
+*.jks
+*.keystore

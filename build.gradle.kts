@@ -8,3 +8,9 @@ plugins {
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.apollo) apply false
 }
+
+subprojects {
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+        compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+    }
+}

@@ -1,8 +1,7 @@
 plugins {
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.hilt)
     alias(libs.plugins.ksp)
     alias(libs.plugins.apollo)
 }
@@ -31,6 +30,11 @@ apollo {
         packageName.set("com.kevindev.animeapp.core.network.graphql")
         schemaFile.set(file("src/main/graphql/schema.graphqls"))
         srcDir("src/main/graphql")
+
+        introspection {
+            endpointUrl.set("https://graphql.anilist.co")
+            schemaFile.set(file("src/main/graphql/schema.graphqls"))
+        }
     }
 }
 
@@ -42,7 +46,4 @@ dependencies {
     implementation(libs.apollo.normalized.cache)
     implementation(libs.apollo.normalized.cache.sqlite)
     implementation(libs.kotlinx.coroutines.android)
-
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
 }

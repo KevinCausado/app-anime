@@ -1,7 +1,7 @@
 [versions]
 agp                         = "9.0.1"
-kotlin                      = "2.0.21"
-ksp                         = "2.0.21-1.0.29"
+kotlin                      = "2.3.21"
+ksp                         = "2.3.9"
 
 # Compose
 composeBom                  = "2025.05.00"
@@ -16,7 +16,7 @@ tvFoundation                = "1.0.0"
 navigationCompose           = "2.9.0"
 
 # Hilt
-hilt                        = "2.56.2"
+hilt                        = "2.59.2"
 hiltNavigationCompose       = "1.2.0"
 
 # Networking

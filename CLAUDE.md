@@ -61,6 +61,36 @@ El perfil activo se guarda en DataStore (`activeProfileId: Long`).
 - minSdk 26 (Android 8.0), targetSdk último estable
 - Módulos TV reusan todos los ViewModels/Repositories de phone — solo difieren los Composables
 
+## AGP 9+ Built-in Kotlin
+
+AGP 9.0+ tiene **built-in Kotlin** habilitado por defecto. Si aplicas `kotlin-android` explícitamente, explota con:
+```
+Cannot add extension with name 'kotlin', as there is an extension already registered with that name.
+```
+
+### Solución actual (bypass temporal hasta que KSP/Apollo migren)
+En `gradle.properties`:
+```properties
+android.builtInKotlin=false
+android.newDsl=false
+```
+
+Esto deshabilita built-in Kotlin y el nuevo DSL de AGP 9, permitiendo usar `kotlin-android` como antes.
+
+### Migración futura
+Cuando KSP y Apollo sean 100% compatibles con built-in Kotlin, eliminar:
+- `android.builtInKotlin=false` y `android.newDsl=false` de `gradle.properties`
+- `alias(libs.plugins.kotlin.android)` de todos los `build.gradle.kts` y del root
+- La línea `kotlin-android` de `gradle/libs.versions.toml`
+
+## Versiones clave (actualizado May 2026)
+| Componente | Versión |
+|---|---|
+| Gradle | 9.2.1 |
+| AGP | 9.0.1 |
+| Kotlin | 2.3.21 |
+| KSP | 2.3.9 |
+
 ## Fases de implementación (ver plan completo)
 1. Setup multi-módulo + build-logic + libs.versions.toml
 2. Core Network (Apollo + Retrofit)
