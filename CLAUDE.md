@@ -41,8 +41,10 @@ build-logic/  → convention plugins Gradle
 ## APIs
 - **AniList:** `https://graphql.anilist.co` — sin auth, 90 req/min
 - **Consumet:** URL propia en `local.properties` como `CONSUMET_BASE_URL`
-  - Proveedor primario: HiAnime (`/anime/hianime/...`)
-  - Fallback: AnimeKai (`/anime/animekai/...`)
+  - Fork: `KevinCausado/consumet-on-vercel` (npm `@consumet/extensions@^1.8.8`)
+  - Proveedor primario: HiAnime (`/anime/hianime/...`) — Cloudflare 523 en cloud, probar local
+  - Fallback: AnimeKai (`/anime/animekai/...`) — search/info OK, watch bloqueado en datacenter IPs
+- **Streaming local (dev):** Correr `consumet-on-vercel` local (`localhost:3000`), emulador usa `10.0.2.2:3000`
 
 ## Diseño
 - Dark theme: fondo `#0B0C0F`, superficie `#1A1B1E`
@@ -302,6 +304,41 @@ core/notification/src/main/kotlin/com/kevindev/animeapp/core/notification/
 **Worker:** PeriodicWorkRequest cada 6h, consulta Consumet `getEpisodes` para animes en `NotificationTrackEntity`, compara con `lastCheckedEpisode`.
 
 ---
+
+## Streaming API — `consumet-on-vercel` (fork local)
+
+Repo: `https://github.com/KevinCausado/consumet-on-vercel.git`
+Rama: `main` — se auto-despliega en Vercel (timeouts 10s) y Render (watch bloqueado por IP)
+
+### Providers disponibles en `@consumet/extensions@^1.8.8`
+| Provider | Search | Info | Watch |
+|---|---|---|---|
+| HiAnime | ❌ CF 523 | ❌ CF 523 | ❌ CF 523 |
+| AnimeKai | ✅ | ✅ | ❌ IP block en cloud, ✅ local |
+| AnimePahe | ❌ DNS fail | ❌ DNS fail | ❌ DNS fail |
+
+Watch de AnimeKai funciona **solo desde IP residencial** (localhost). En cloud (Render/Vercel) las IPs de datacenter (AWS) están bloqueadas.
+
+### Cómo correr local
+```bash
+git clone https://github.com/KevinCausado/consumet-on-vercel.git
+cd consumet-on-vercel
+npm install && npm start
+# → http://localhost:3000
+```
+
+### `local.properties` para dev
+```properties
+CONSUMET_BASE_URL=http://10.0.2.2:3000
+```
+
+### Cambios hechos al fork
+- `@consumet/extensions` actualizado de `github:LUMINARSFT/consumet.ts` a npm `^1.8.8`
+- Creados `src/routes/anime/hianime.ts` y `animekai.ts` con endpoints search/info/watch
+- Eliminados 14 archivos muertos (9anime, anify, animefox, bilibili, crunchyroll, gogoanime, marin, zoro, mangasee123, mangapark, viewasian, fmovies, readlightnovels + index fixes)
+- `Dockerfile` modificado: compila con `tsc` en build, arranca con `node dist/main.js` (sin healthcheck roto)
+- Eliminados `fastify-cors` y `@types/fastify-cors` (usamos `@fastify/cors`)
+- Error handling arreglado en hianime.ts y animekai.ts (`.catch()` bug)
 
 ## Reglas generales para todas las fases
 
